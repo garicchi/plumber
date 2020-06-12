@@ -4,16 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainGameManager : MonoBehaviour
+public class TitleSceneController : MonoBehaviour
 {
     [SerializeField]
     public Button BtnTitleStart;
     // Start is called before the first frame update
     void Start()
     {
-        BtnTitleStart.onClick.AddListener(() => {
-            OnTitleStartClick();
-        });
+        BtnTitleStart.onClick.AddListener(OnTitleStartClick);
     }
 
     // Update is called once per frame
