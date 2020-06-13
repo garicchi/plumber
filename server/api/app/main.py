@@ -1,10 +1,20 @@
 from flask import Flask, send_from_directory
+from api_pb2 import Product
+
 app = Flask(__name__)
 
 
 @app.route('/login')
 def hello_world():
     return 'Hello, World!'
+
+
+@app.route('/product')
+def get_product():
+    d = Product()
+    d.name = "hoge"
+    s = d.SerializeToString()
+    return s
 
 
 @app.route('/masterdata')
