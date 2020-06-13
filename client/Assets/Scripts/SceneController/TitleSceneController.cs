@@ -22,6 +22,10 @@ public class TitleSceneController : MonoBehaviour
 
     public void OnTitleStartClick() 
     {
-        SceneManager.LoadScene("HomeScene");
+        StartCoroutine(SvApi.Get("login", (text) => {
+            Debug.Log(text);
+            throw new System.Exception(text);
+        }));
+        //SceneManager.LoadScene("HomeScene");
     }
 }

@@ -696,7 +696,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1273882537}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b7e18d723d219f44a4eb2091add7367, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e2cd0314543da545a7d5eccd8e499b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   BtnGameStart: {fileID: 1259031081}
