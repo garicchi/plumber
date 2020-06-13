@@ -1,0 +1,44 @@
+version: '3'
+services:
+  api:
+    build:
+      context: ./api
+    ports:
+      - 5000:5000
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USER}
+      DB_PASSWORD: ${DB_PASS}
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    env_file:
+      .env
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS} 
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - 3307:3306
+  storage:
+    image: minio/minio
+    command: "server /data"
+    env_file:
+      .env
+    environment:
+      MINIO_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${AWS_SECRET_KEY}
+    ports:
+      - 9000:9000
+    
+
+
+volumes:
+  db-data:
