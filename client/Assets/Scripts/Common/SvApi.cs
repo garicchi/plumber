@@ -20,7 +20,7 @@ public static class SvApi
         else
         {
             var data = www.downloadHandler.data;
-            var dest = Path.Combine(Application.persistentDataPath, "masterdata.db");
+            var dest = Config.Instance.MasterDataPath;
             File.WriteAllBytes(dest, data);
             callback();
         }

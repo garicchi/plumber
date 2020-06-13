@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
 
 public class TitleSceneController : MonoBehaviour
 {
@@ -24,7 +25,10 @@ public class TitleSceneController : MonoBehaviour
     {
         StartCoroutine(SvApi.GetMasterData(() => {
             Debug.Log("DownloadCompleted");
+            var a = MasterData.SelectHomeImage().Where(q => q.name == "home_char01").ToList();
+            int b = 0;
         }));
+        
         //SceneManager.LoadScene("HomeScene");
     }
 }
