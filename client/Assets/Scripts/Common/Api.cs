@@ -30,9 +30,9 @@ namespace Proto {
             "ASADKAsyDi5wcm90by5Qcm9kdWN0YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.Product), global::Proto.Product.Parser, new[]{ "Id", "Name", "Description", "Price", "Colors" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.ProductList), global::Proto.ProductList.Parser, new[]{ "Products" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.Product), global::Proto.Product.Parser, new[]{ "Id", "Name", "Description", "Price", "Colors" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Proto.ProductList), global::Proto.ProductList.Parser, new[]{ "Products" }, null, null, null)
           }));
     }
     #endregion

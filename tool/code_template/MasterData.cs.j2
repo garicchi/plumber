@@ -1,0 +1,20 @@
+using System.Collections.Generic;
+using SQLite4Unity3d;
+
+namespace MasterData
+{
+    {% for table in tables %}
+    public class {{table['name']}}
+    {
+        {% for column in table['columns'] %}
+        public {{column['type']}} {{column['name']}} { get; set; }
+        {% endfor %}
+
+        public static IEnumerable<{{table['name']}}> Select(string cond="", params object[] args)
+        {
+            return (new SQLiteConnection(Config.Instance.MasterDataPath, SQLiteOpenFlags.ReadOnly))
+                .Query<{{table['name']}}>($"SELECT * FROM {{table['name']}} {cond}", args);
+        }
+    }
+    {% endfor %}
+}

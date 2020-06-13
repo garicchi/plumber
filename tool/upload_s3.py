@@ -4,20 +4,19 @@ from argparse import ArgumentParser
 import os
 import sqlite3
 
-AWS_ACCESS_KEY = os.environ['AWS_ACCESS_KEY']
-AWS_SECRET_KEY = os.environ['AWS_SECRET_KEY']
-    
 
 def main(args):
     md_path = args.masterdata_path
     bucket_name = args.bucket_name
+    aws_access_key = args.aws_access_key
+    aws_secret_key = args.aws_secret_key
     s3_url = args.s3_url
     print('start to upload')
     s3 = boto3.resource(
         's3',
         endpoint_url=s3_url,
-        aws_access_key_id=AWS_ACCESS_KEY,
-        aws_secret_access_key=AWS_SECRET_KEY
+        aws_access_key_id=aws_access_key,
+        aws_secret_access_key=aws_secret_key
     )
     
     buckets = [x for x in s3.buckets.all() if x.name == bucket_name]
@@ -51,6 +50,8 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('--masterdata-path', type=str, required=True)
     parser.add_argument('--bucket-name', type=str, required=True)
+    parser.add_argument('--aws-access-key', type=str, required=True)
+    parser.add_argument('--aws-secret-key', type=str, required=True)
     parser.add_argument('--s3-url', type=str, required=True)
     args = parser.parse_args()
     main(args)

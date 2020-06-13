@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
+using MasterData;
 
 public class TitleSceneController : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class TitleSceneController : MonoBehaviour
     {
         StartCoroutine(SvApi.GetMasterData(() => {
             Debug.Log("DownloadCompleted");
-            var a = MasterData.SelectHomeImage().Where(q => q.name == "home_char01").ToList();
+            var a = m_home_image.Select();
             int b = 0;
         }));
         
