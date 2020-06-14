@@ -1,11 +1,13 @@
 from argparse import ArgumentParser
 from pathlib import Path
 import sqlite3
+from util import str_to_columus, columns_to_str
 
 MASTARDATA_NAME = 'masterdata.db'
 
 
 def _convert_header(header):
+    
     for h in header:
         cols = h.split(' ')
         if cols[1] == 'asset':
@@ -15,12 +17,16 @@ def _convert_header(header):
 
 def _create_md_table(conn, tsv_path):
     with open(tsv_path) as f:
-        header = f.readline().rstrip('\n').split('\t')
-        header = list(_convert_header(header))
+        header_str = f.readline().rstrip('\n')
+        columns = str_to_columus(header_str, delim='\t')
+        for c in columns:
+            if c['type'] == 'asset':
+                c['type'] = 'text'
+        
         table_name = tsv_path.stem
-        header_q = ','.join(header)
+        header_q = columns_to_str(columns)
         conn.execute(f'CREATE TABLE {table_name} ({header_q})')
-        query_placeholder = ','.join(['?' for x in header])
+        query_placeholder = ','.join(['?' for x in columns])
         for line in f:
             row = line.rstrip('\n').split('\t')
             conn.execute(f'INSERT INTO {table_name} VALUES ({query_placeholder})', row)

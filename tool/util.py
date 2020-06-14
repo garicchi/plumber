@@ -1,8 +1,8 @@
 import re
 
-def str_to_columus(column_str: str):
+def str_to_columus(column_str: str, delim=','):
     columns = []
-    for c in column_str.split(','):
+    for c in column_str.split(delim):
         type_infos = c.lstrip(' ').split(' ')
         columns.append({
             'name': type_infos[0],
@@ -15,7 +15,7 @@ def str_to_columus(column_str: str):
 def columns_to_str(columns: list):
     results = []
     for col in columns:
-        ' '.join([col['name'], col['type']] + col['additional'])
+        results.append(' '.join([col['name'], col['type']] + col['additional']))
     return ','.join(results)
 
 
