@@ -12,6 +12,6 @@ docker run -it -v ${SCRIPT_PATH}/../:/work plumber-build \
 
 docker run -it -v ${SCRIPT_PATH}/../:/work plumber-build \
     python /work/tool/gen_code.py \
-      --masterdata-path /work/server/api/md/masterdata.db
+      --masterdata-path /work/server/api/static/masterdata.db
 
 echo "success to generate"

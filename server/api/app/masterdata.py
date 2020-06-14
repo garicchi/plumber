@@ -27,7 +27,7 @@ class m_game_param:
         con.close()
 
 
-class m_home_image:
+class m_home_asset:
     
     name: str
     
@@ -38,7 +38,7 @@ class m_home_image:
         con = sqlite3.connect("/var/masterdata.db")
         con.row_factory = dict_factory
         cur = con.cursor()
-        for row in cur.execute(f'SELECT * FROM m_home_image {cond}', param):
+        for row in cur.execute(f'SELECT * FROM m_home_asset {cond}', param):
             r = cls()
             for k, v in row.items():
                 r.__setattr__(k, v)

@@ -22,7 +22,7 @@ def get_product():
 
 @app.route('/masterdata')
 def get_masterdata():
-    return send_from_directory('/var', filename='masterdata.db')
+    return send_from_directory('/var/static', filename='masterdata.db')
 
 
 if __name__ == '__main__':

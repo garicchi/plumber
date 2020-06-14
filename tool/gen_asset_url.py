@@ -11,7 +11,7 @@ def main(args):
     aws_access_key = args.aws_access_key
     aws_secret_key = args.aws_secret_key
     s3_url = args.s3_url
-    print('start to upload')
+    print('start to generate url')
     s3 = boto3.resource(
         's3',
         endpoint_url=s3_url,
@@ -25,12 +25,10 @@ def main(args):
     client = s3.meta.client
     bucket = s3.Bucket(bucket_name)
     conn = sqlite3.connect(md_path)
-    root_dir = Path(__file__).parent.parent / 'client/AssetBundle'
+    root_dir = Path(__file__).parent.parent / 'client/AssetBundles'
     expire_sec = 60 * 60 * 24 * 30
     for asset in conn.execute('SELECT * FROM asset'):
         asset_path = asset[0]
-        file_path = root_dir / asset_path
-        bucket.upload_file(str(file_path), str(asset_path))
         url = client.generate_presigned_url(
             'get_object',
             Params={
@@ -43,7 +41,7 @@ def main(args):
         print(asset_path)
     conn.commit()
     
-    print('finish to upload')
+    print('finish to generate url')
 
 
 if __name__ == '__main__':

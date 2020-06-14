@@ -3,29 +3,7 @@ from pathlib import Path
 import sqlite3
 
 MASTARDATA_NAME = 'masterdata.db'
-PLATFORMS = ['Windows', 'Android']
 
-
-def _insert_asset_table(conn, tsv_path):
-    with open(tsv_path) as f:
-        header = f.readline().rstrip('\n').split('\t')
-        header_types = [{
-            'name': x.split(' ')[0],
-            'type': x.split(' ')[1]
-        } for x in header]
-        if not [x for x in header_types if x['type'] == 'asset']:
-            return
-        
-        for line in f:
-            cells = line.rstrip('\n').split('\t')        
-            for i, h in enumerate(header_types):
-                if h['type'] != 'asset':
-                    continue
-                cel = cells[i]
-                for p in PLATFORMS:
-                    path = p + '/' + cel
-                    conn.execute('INSERT INTO asset VALUES (?, ?)', (path, ""))
-            
 
 def _convert_header(header):
     for h in header:
@@ -67,9 +45,7 @@ def main(args):
     
     conn.execute('CREATE TABLE asset (path text, url text)')
     conn.commit()
-    for tsv in tsv_list:
-        _insert_asset_table(conn, tsv) 
-    conn.commit()
+    
     print(f'generate masterdata in [{output_path}]')
     
     

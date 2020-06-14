@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
 using MasterData;
+using AssetData;
 
 public class TitleSceneController : MonoBehaviour
 {
@@ -25,11 +26,13 @@ public class TitleSceneController : MonoBehaviour
     public void OnTitleStartClick() 
     {
         StartCoroutine(SvApi.GetMasterData(() => {
-            Debug.Log("DownloadCompleted");
-            var a = m_home_image.Select();
-            int b = 0;
+            StartCoroutine(AssetDownloader.DownloadAssetsAsync((progress) => {
+                Debug.Log($"Donwload [{progress.current}/{progress.max}]");
+                },
+                () => {
+                Debug.Log("Download Completed");
+                SceneManager.LoadScene("HomeScene");
+            }));
         }));
-        
-        //SceneManager.LoadScene("HomeScene");
     }
 }

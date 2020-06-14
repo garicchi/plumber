@@ -19,7 +19,7 @@ namespace MasterData
         }
     }
     
-    public class m_home_image
+    public class m_home_asset
     {
         
         public string name { get; set; }
@@ -27,10 +27,10 @@ namespace MasterData
         public string asset_path { get; set; }
         
 
-        public static IEnumerable<m_home_image> Select(string cond="", params object[] args)
+        public static IEnumerable<m_home_asset> Select(string cond="", params object[] args)
         {
             return (new SQLiteConnection(Config.Instance.MasterDataPath, SQLiteOpenFlags.ReadOnly))
-                .Query<m_home_image>($"SELECT * FROM m_home_image {cond}", args);
+                .Query<m_home_asset>($"SELECT * FROM m_home_asset {cond}", args);
         }
     }
     

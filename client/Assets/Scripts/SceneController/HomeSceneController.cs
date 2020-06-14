@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using AssetData;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using MasterData;
+using System.Linq;
 
 public class HomeSceneController : MonoBehaviour
 {
@@ -15,11 +18,15 @@ public class HomeSceneController : MonoBehaviour
     void Start()
     {
         BtnGameStart.onClick.AddListener(OnGameStartClick);
+        var asset_data = m_home_asset.Select("WHERE name = ?", "home_texture01").First();
+        StartCoroutine(AssetLoader.LoadTexture2DAsync(asset_data.asset_path, (texture) => {
+            HomeSprite.GetComponent<SpriteRenderer>().sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);    
+        }));
 
-        var homeTextureAb = AssetBundle.LoadFromFile("AssetBundle/Windows/asset01");
-        var homeTexture = homeTextureAb.LoadAsset<Texture2D>("asset01");
-        
-        HomeSprite.GetComponent<SpriteRenderer>().sprite = Sprite.Create(homeTexture, new Rect(0.0f, 0.0f, homeTexture.width, homeTexture.height), new Vector2(0.5f, 0.5f), 100.0f);
+        asset_data = m_home_asset.Select("WHERE name = ?", "home_prefab01").First();
+        StartCoroutine(AssetLoader.LoadPrefabAsync(asset_data.asset_path, (obj) => {
+            Instantiate(obj);
+        }));
     }
 
     // Update is called once per frame

@@ -9,16 +9,16 @@ public class AssetBundleBuilder : MonoBehaviour
     [MenuItem("Assets/Build Asset Bundles")]
     static void BuildAssetBundle() 
     {
-        var outputPath = "AssetBundle/Android";
+        var options = BuildAssetBundleOptions.None;
+        var outputPath = "AssetBundles/Android";
         if (!Directory.Exists(outputPath))
         {
             Directory.CreateDirectory(outputPath);
         }
-        var options = BuildAssetBundleOptions.None;
         var target = BuildTarget.Android;
         BuildPipeline.BuildAssetBundles(outputPath, options, target);
 
-        outputPath = "AssetBundle/Windows";
+        outputPath = "AssetBundles/Windows";
         if (!Directory.Exists(outputPath))
         {
             Directory.CreateDirectory(outputPath);

@@ -12,7 +12,6 @@ RUN mkdir -p /app
 
 ENV PYTHONPATH=/app
 COPY ./app /app
-COPY ./md/masterdata.db /var/masterdata.db
 
 WORKDIR /app
 
