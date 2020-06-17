@@ -15,6 +15,6 @@ docker run -it -v ${SCRIPT_PATH}/../:/work plumber-build \
     --bucket-name ${BUCKET_NAME} \
     --aws-access-key ${AWS_ACCESS_KEY} \
     --aws-secret-key ${AWS_SECRET_KEY} \
-    --s3-url http://host.docker.internal:9000
+    --s3-url ${STORAGE_URL}
 
 echo "success to generate url"

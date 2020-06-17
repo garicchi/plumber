@@ -1,1 +1,5 @@
-# unity-reverse
+# PLUMBER
+
+APIサーバーありのUnityのミニプロジェクトです
+
+AssetBundleビルドやマスターデータ生成などを一通り体験できます

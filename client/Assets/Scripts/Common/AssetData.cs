@@ -46,6 +46,7 @@ namespace AssetData
                 yield return GetRequestAsync(asset_data.url, (handler)=> {
                     var savePath = Path.Combine(Config.Instance.ABSaveRootPath, asset_data.path);
                     var saveDir = Path.GetDirectoryName(savePath);
+                    Debug.Log(saveDir);
                     if (!Directory.Exists(saveDir))
                         Directory.CreateDirectory(saveDir);
                     File.WriteAllBytes(savePath, handler.data);

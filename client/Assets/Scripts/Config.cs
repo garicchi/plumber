@@ -38,11 +38,47 @@ public class Config
         }
     }
 
-    public string SERVER_URL = "http://localhost:5000";
+    public string KEY_SERVER_URL = "SERVER_URL";
+    public string SERVER_URL
+    {
+        get 
+        {
+            return PlayerPrefs.GetString(KEY_SERVER_URL, "http://localhost:5000");
+        }
+        set
+        {
+            PlayerPrefs.SetString(KEY_SERVER_URL, value);
+        }
+    }
 
-    public string STORAGE_URL = "http://localhost:9000";
+    public string KEY_STORAGE_URL = "STORAGE_URL";
+    public string STORAGE_URL
+    {
+        get 
+        {
+            return PlayerPrefs.GetString(KEY_STORAGE_URL, "http://localhost:9000");
+        }
+        set
+        {
+            PlayerPrefs.SetString(KEY_STORAGE_URL, value);
+        }
+    }
+
+    public string KEY_USER_ID = "USER_ID";
+    public string USER_ID
+    {
+        get 
+        {
+            return PlayerPrefs.GetString(KEY_USER_ID, "unknown user");
+        }
+        set
+        {
+            PlayerPrefs.SetString(KEY_USER_ID, value);
+        }
+    }
 
     public string PLATFORM_STRING = "Unknown";
+
 
     public string MasterDataPath
     {

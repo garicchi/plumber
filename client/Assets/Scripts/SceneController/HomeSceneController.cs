@@ -14,6 +14,9 @@ public class HomeSceneController : MonoBehaviour
 
     [SerializeField]
     public GameObject HomeSprite;
+
+    [SerializeField]
+    public Text UserIdText;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +30,8 @@ public class HomeSceneController : MonoBehaviour
         StartCoroutine(AssetLoader.LoadPrefabAsync(asset_data.asset_path, (obj) => {
             Instantiate(obj);
         }));
+
+        UserIdText.text = Config.Instance.USER_ID;
     }
 
     // Update is called once per frame
