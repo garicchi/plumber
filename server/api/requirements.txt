@@ -1,2 +1,4 @@
 flask
 protobuf
+SQLAlchemy
+mysqlclient
