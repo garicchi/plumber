@@ -21,6 +21,11 @@ public class HomeSceneController : MonoBehaviour
     void Start()
     {
         BtnGameStart.onClick.AddListener(OnGameStartClick);
+        UserIdText.text = Config.Instance.USER_ID;
+    }
+
+    void Awake()
+    {
         var asset_data = m_home_asset.Select("WHERE name = ?", "home_texture01").First();
         StartCoroutine(AssetLoader.LoadTexture2DAsync(asset_data.asset_path, (texture) => {
             HomeSprite.GetComponent<SpriteRenderer>().sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);    
@@ -31,7 +36,6 @@ public class HomeSceneController : MonoBehaviour
             Instantiate(obj);
         }));
 
-        UserIdText.text = Config.Instance.USER_ID;
     }
 
     // Update is called once per frame

@@ -80,8 +80,9 @@ namespace AssetData
                 var requestCreate = AssetBundle.LoadFromFileAsync(absolutePath);
                 LoadedAssetBundles[assetPath] = requestCreate.assetBundle;
                 yield return requestCreate;
-                result = LoadedAssetBundles[assetPath];
             }
+            result = LoadedAssetBundles[assetPath];
+            
             onComplete(result);
             
         }

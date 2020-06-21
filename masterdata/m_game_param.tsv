@@ -1,2 +1,3 @@
 key text pk	value int
 init_game_time_sec	3
+score_point_attack	10
