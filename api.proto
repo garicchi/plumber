@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-package proto;
-
-message User {
-    int32 id = 1;
-}
