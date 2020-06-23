@@ -5,15 +5,65 @@ import os
 import sqlite3
 from util import create_table_to_schema, convert_type_csharp, convert_type_python
 import copy
+import yaml
 
 
-def main(args):
-    md_path = args.masterdata_path
-    template_path = Path(__file__).parent / 'code_template'
-    client_path = Path(__file__).parent.parent / 'client/Assets/Scripts/Common'
-    server_path = Path(__file__).parent.parent / 'server/api/app'
-    print('start to generate code')
+template_path = Path(__file__).parent / 'code_template'
+client_path = Path(__file__).parent.parent / 'client/Assets/Scripts/Common'
+server_path = Path(__file__).parent.parent / 'server/api/app'
+protcol_path = Path(__file__).parent.parent / 'protocol'
+
+
+def _gen_protocol():
+    protocol_list = protcol_path.glob('**/*.yml')
+    protocol = {}
+    for file in protocol_list:
+        with open(file) as f:
+            d = yaml.safe_load(f)
+            for k, v in d.items():
+                protocol[k] = v    
     
+    protocol_for_cl = copy.deepcopy(protocol)
+    for name, p in protocol_for_cl.items():
+        req = p['req']
+        res = p['res']
+        for k, v in req.items():
+            req[k] = convert_type_csharp(v)
+        for k, v in res.items():
+            res[k] = convert_type_csharp(v)
+            
+    protocol_for_sv = copy.deepcopy(protocol)
+    for name, p in protocol_for_sv.items():
+        req = p['req']
+        res = p['res']
+        for k, v in req.items():
+            req[k] = convert_type_python(v)
+        for k, v in res.items():
+            res[k] = convert_type_python(v)
+        
+    with open(template_path / 'Protocol.cs.j2') as f:
+        template = f.read()
+    t = Template(template)
+    r = t.render(protocol=protocol_for_cl)
+    with open(client_path / 'Protocol.cs', 'w') as f:
+        f.write(r)
+        
+    with open(template_path / 'protocol.py.j2') as f:
+        template = f.read()
+    t = Template(template)
+    r = t.render(protocol=protocol_for_sv)
+    with open(server_path / 'protocol.py', 'w') as f:
+        f.write(r)
+        
+    with open(template_path / 'route.py.j2') as f:
+        template = f.read()
+    t = Template(template)
+    r = t.render(protocol=protocol_for_sv)
+    with open(server_path / 'route.py', 'w') as f:
+        f.write(r)
+
+
+def _gen_masterdata_code(md_path: Path):    
     conn = sqlite3.connect(md_path)
     md_tables = [
         {
@@ -51,8 +101,13 @@ def main(args):
     r = t.render(tables=tables_for_sv)
     with open(server_path / 'masterdata.py', 'w') as f:
         f.write(r)
-    
-    print('finish to upload')
+
+def main(args):
+    print('start to generate code')
+    md_path = args.masterdata_path
+    _gen_masterdata_code(md_path)
+    _gen_protocol()
+    print('finish to generate code')
 
 
 if __name__ == '__main__':

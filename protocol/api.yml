@@ -1,0 +1,6 @@
+api_login:
+    req:
+        user_id: "text"
+    res:
+        user_id: "text"
+

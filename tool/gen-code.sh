@@ -8,9 +8,6 @@ docker build -t plumber-build ${SCRIPT_PATH}
 export MSYS_NO_PATHCONV=1
 
 docker run -it -v ${SCRIPT_PATH}/../:/work plumber-build \
-    protoc --python_out=/work/server/api/app -I=/work /work/api.proto
-
-docker run -it -v ${SCRIPT_PATH}/../:/work plumber-build \
     python /work/tool/gen_code.py \
       --masterdata-path /work/server/api/static/masterdata.db
 

@@ -2,14 +2,6 @@ syntax = "proto3";
 
 package proto;
 
-message Product {
-    uint64 id = 1;
-    string name = 2;
-    string description = 3;
-    int32 price = 4;
-    repeated string colors = 5;
-}
-
-message ProductList {
-    repeated Product products = 1;
+message User {
+    int32 id = 1;
 }

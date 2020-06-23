@@ -1,45 +1,56 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Proto;
+using Protocol;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
 
 public static class SvApi
 {
-    public static IEnumerator GetMasterData(Action callback)
+    
+    private static IEnumerator GetAsync(string endpoint, Action<DownloadHandler> callback)
     {
-        var url = $"{Config.Instance.SERVER_URL}/masterdata";
+        var url = $"{Config.Instance.SERVER_URL}{endpoint}";
         var www = UnityWebRequest.Get(url);
         yield return www.SendWebRequest();
-        if (www.isNetworkError || www.isHttpError) 
+        if (www.isNetworkError || www.isHttpError)
         {
             throw new Exception(www.error);
         }
         else
         {
-            var data = www.downloadHandler.data;
-            var dest = Config.Instance.MasterDataPath;
-            File.WriteAllBytes(dest, data);
-            callback();
+            callback(www.downloadHandler);
         }
     }
 
-    public static IEnumerator GetProduct(string endpoint, Action<Product> callback) 
+    private static IEnumerator PostAsync(string endpoint, string data, Action<DownloadHandler> callback)
     {
-        var url = $"{Config.Instance.SERVER_URL}/{endpoint}";
-        var www = UnityWebRequest.Get(url);
+        var url = $"{Config.Instance.SERVER_URL}{endpoint}";
+        var www = UnityWebRequest.Post(url, data);
         yield return www.SendWebRequest();
-        if (www.isNetworkError || www.isHttpError) 
+        if (www.isNetworkError || www.isHttpError)
         {
             throw new Exception(www.error);
         }
         else
         {
-            var data = www.downloadHandler.data;
-            var d = Product.Parser.ParseFrom(data);
-            callback(d);
+            callback(www.downloadHandler);
         }
+    }
+    public static IEnumerator GetMasterData(Action callback)
+    {
+        yield return GetAsync("/masterdata", (handler) => {
+            var dest = Config.Instance.MasterDataPath;
+            File.WriteAllBytes(dest, handler.data);
+            callback();
+        });
+    }
+
+    public static IEnumerator LoginAsync(api_login_req data, Action<api_login_res> callback) 
+    {
+        yield return PostAsync(api_login_req.GetEndpoint(), data.Serialize(), (handler) => {
+            callback(api_login_res.Deserialize(handler.text));
+        });
     }
 }

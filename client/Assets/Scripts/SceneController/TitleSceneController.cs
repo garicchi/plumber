@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System.Linq;
 using MasterData;
 using AssetData;
+using Protocol;
 
 public class TitleSceneController : MonoBehaviour
 {
@@ -36,21 +37,27 @@ public class TitleSceneController : MonoBehaviour
 
     public void OnTitleStartClick() 
     {
-        if (!PlayerPrefs.HasKey(Config.Instance.KEY_USER_ID))
-        {
-            var id = (System.Int32)Random.Range(0, System.Int32.MaxValue);
-            Config.Instance.USER_ID = id.ToString();
-        }
         Config.Instance.SERVER_URL = InputServer.text + ":5000";
         Config.Instance.STORAGE_URL = InputServer.text + ":9000";
-        StartCoroutine(SvApi.GetMasterData(() => {
-            StartCoroutine(AssetDownloader.DownloadAssetsAsync((progress) => {
-                Debug.Log($"Donwload [{progress.current}/{progress.max}]");
+        api_login_req req = new api_login_req();
+        req.user_id = PlayerPrefs.GetString(Config.Instance.KEY_USER_ID, "");
+        StartCoroutine(SvApi.LoginAsync(req, (res) =>
+        {
+            Config.Instance.USER_ID = res.user_id.ToString();
+            StartCoroutine(SvApi.GetMasterData(() =>
+            {
+                StartCoroutine(AssetDownloader.DownloadAssetsAsync((progress) =>
+                {
+                    Debug.Log($"Donwload [{progress.current}/{progress.max}]");
                 },
-                () => {
-                Debug.Log("Download Completed");
-                SceneManager.LoadScene("HomeScene");
+                    () =>
+                    {
+                        Debug.Log("Download Completed");
+                        SceneManager.LoadScene("HomeScene");
+                    }));
             }));
         }));
+        
     }
+
 }
