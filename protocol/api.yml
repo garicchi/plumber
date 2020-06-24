@@ -4,3 +4,9 @@ api_login:
     res:
         user_id: "text"
 
+api_finish_game:
+    req:
+        user_id: "text"
+        score: "int"
+    res:
+        

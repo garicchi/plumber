@@ -36,4 +36,33 @@ namespace Protocol
         }
     }
     
+    [Serializable]
+    public class api_finish_game_req
+    {
+        
+        public string user_id;
+        
+        public int score;
+        
+        public string Serialize()
+        {
+            return JsonUtility.ToJson(this);
+        }
+
+        public static string GetEndpoint()
+        {
+            return "/api_finish_game";
+        }
+    }
+
+    [Serializable]
+    public class api_finish_game_res
+    {
+        
+        public static api_finish_game_res Deserialize(string jsonString)
+        {
+            return JsonUtility.FromJson<api_finish_game_res>(jsonString);
+        }
+    }
+    
 }

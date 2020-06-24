@@ -25,21 +25,25 @@ def _gen_protocol():
     
     protocol_for_cl = copy.deepcopy(protocol)
     for name, p in protocol_for_cl.items():
-        req = p['req']
-        res = p['res']
-        for k, v in req.items():
-            req[k] = convert_type_csharp(v)
-        for k, v in res.items():
-            res[k] = convert_type_csharp(v)
+        if not p['req']:
+            p['req'] = {}
+        for k, v in p['req'].items():
+            p['req'][k] = convert_type_csharp(v)
+        if not p['res']:
+            p['res'] = {}
+        for k, v in p['res'].items():
+            p['res'][k] = convert_type_csharp(v)
             
     protocol_for_sv = copy.deepcopy(protocol)
     for name, p in protocol_for_sv.items():
-        req = p['req']
-        res = p['res']
-        for k, v in req.items():
-            req[k] = convert_type_python(v)
-        for k, v in res.items():
-            res[k] = convert_type_python(v)
+        if not p['req']:
+            p['req'] = {}
+        for k, v in p['req'].items():
+            p['req'][k] = convert_type_python(v)
+        if not p['res']:
+            p['res'] = {}
+        for k, v in p['res'].items():
+            p['res'][k] = convert_type_python(v)
         
     with open(template_path / 'Protocol.cs.j2') as f:
         template = f.read()

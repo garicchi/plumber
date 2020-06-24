@@ -29,3 +29,29 @@ class api_login_res:
         
         return json.dumps(data, ensure_ascii=False)
 
+
+class api_finish_game_req:
+    
+    user_id: str
+    
+    score: int
+    
+    @classmethod
+    def deserialize(cls, data_str: str):
+        result = api_finish_game_res
+        data = json.loads(data_str)
+        
+        result.user_id = data["user_id"]
+        
+        result.score = data["score"]
+        
+        return result
+
+
+class api_finish_game_res:
+    
+    def serialize(self):
+        data = {}
+        
+        return json.dumps(data, ensure_ascii=False)
+

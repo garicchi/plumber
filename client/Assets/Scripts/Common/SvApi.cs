@@ -53,4 +53,11 @@ public static class SvApi
             callback(api_login_res.Deserialize(handler.text));
         });
     }
+
+    public static IEnumerator FinishGameAsync(api_finish_game_req data, Action<api_finish_game_res> callback) 
+    {
+        yield return PostAsync(api_finish_game_req.GetEndpoint(), data.Serialize(), (handler) => {
+            callback(api_finish_game_res.Deserialize(handler.text));
+        });
+    }
 }

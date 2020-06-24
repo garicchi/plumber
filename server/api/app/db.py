@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, ForeignKey
 from argparse import ArgumentParser
 import os
 
@@ -17,6 +18,14 @@ class User(Base):
     
     id = Column(Integer, primary_key=True)
     name = Column(String(500))
+    children = relationship("Score")
+
+
+class Score(Base):
+    __tablename__ = 'scores'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    score = Column(Integer)
     
     
 def reset(args):

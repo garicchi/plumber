@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
+using Protocol;
 
 public class GameSceneController : MonoBehaviour
 {
@@ -65,6 +66,14 @@ public class GameSceneController : MonoBehaviour
 
     void OnBack() 
     {
-        SceneManager.LoadScene("HomeScene");
+        var req = new api_finish_game_req
+        {
+            user_id = Config.Instance.USER_ID,
+            score = score
+        };
+        StartCoroutine(SvApi.FinishGameAsync(req, (res) => {
+            SceneManager.LoadScene("HomeScene");
+        }));
+        
     }
 }

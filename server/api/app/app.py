@@ -1,8 +1,10 @@
-from flask import Flask, send_from_directory, g
+from flask import Flask, send_from_directory, g, Response
 from flask.views import View
 from route import routes
 from db import engine
 from sqlalchemy.orm import sessionmaker
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 
@@ -17,10 +19,12 @@ class ApiRoot(View):
         session = Session()
         g.session = session
         try:
-            res = self.func()
+            res = Response(self.func(), 200)
             session.commit()
-        except:
+        except Exception as e:
             session.rollback()
+            logging.debug(e)
+            return Response(str(e), 500)
         return res
 
 

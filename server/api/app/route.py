@@ -7,4 +7,6 @@ routes = [
 
     ("/api_login", "api_login", api_login),
 
+    ("/api_finish_game", "api_finish_game", api_finish_game),
+
 ]
