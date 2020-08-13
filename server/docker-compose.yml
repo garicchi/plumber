@@ -3,6 +3,7 @@ services:
   api:
     build:
       context: ./api
+    image: gcr.io/practice01-286208/plumber_api
     ports:
       - 5000:5000
     env_file:
@@ -12,8 +13,6 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       DB_USERNAME: ${DB_USER}
       DB_PASSWORD: ${DB_PASS}
-    volumes:
-      - ./api/static:/var/static
     depends_on:
       - db
   db:

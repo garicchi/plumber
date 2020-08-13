@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: plumber-api
+  labels:
+    app: plumber-api
+spec:
+  selector:
+    app: plumber-api
+  ports:
+  - port: 5000
+    targetPort: 5000
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plumber-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: plumber-api
+  template:
+    metadata:
+      labels:
+        app: plumber-api
+    spec:
+      containers:
+        - name: plumber-api
+          image: gcr.io/practice01-286208/plumber_api
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DB_HOST
+              value: plumber-db
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: plumber-secret
+                  key: DB_DATABASE
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: plumber-secret
+                  key: DB_USER
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: plumber-secret
+                  key: DB_PASS
