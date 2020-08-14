@@ -28,7 +28,7 @@ def main(args):
     root_dir = Path(__file__).parent.parent / 'client/AssetBundles'
     expire_sec = 60 * 60 * 24 * 30
     for asset in conn.execute('SELECT * FROM asset'):
-        asset_path = asset[0]
+        asset_path = asset[1]
         url = client.generate_presigned_url(
             'get_object',
             Params={
@@ -37,6 +37,7 @@ def main(args):
             },
             ExpiresIn=expire_sec
         )
+        print(url)
         conn.execute('UPDATE asset SET url = ? WHERE path = ?', (url, asset_path))
         print(asset_path)
     conn.commit()
