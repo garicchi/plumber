@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plumber-batch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plumber-batch
+  template:
+    metadata:
+      labels:
+        app: plumber-batch
+    spec:
+      containers:
+        - name: plumber-batch
+          image: gcr.io/practice01-286208/plumber_api
+          env:
+            - name: DB_HOST
+              value: plumber-db
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: plumber-secret
+                  key: DB_DATABASE
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: plumber-secret
+                  key: DB_USER
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: plumber-secret
+                  key: DB_PASS

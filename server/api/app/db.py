@@ -5,11 +5,12 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from argparse import ArgumentParser
 import os
 
+DB_HOST = os.environ['DB_HOST']
 DB_USER = os.environ['DB_USER']
 DB_PASS = os.environ['DB_PASS']
 DB_DATABASE = os.environ['DB_DATABASE']
 
-engine = create_engine(f'mysql://{DB_USER}:{DB_PASS}@db/{DB_DATABASE}', echo=True)
+engine = create_engine(f'mysql://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_DATABASE}', echo=True)
 Base = declarative_base()
 
 
@@ -38,6 +39,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.COMMAND == 'RESET':
         reset(args)
+        print('resetdb completed!')
     else:
         raise Exception("invalid argument")
         

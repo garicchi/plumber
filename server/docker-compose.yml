@@ -1,6 +1,6 @@
 version: '3'
 services:
-  api:
+  plumber-api:
     build:
       context: ./api
     image: gcr.io/practice01-286208/plumber_api
@@ -14,8 +14,8 @@ services:
       DB_USERNAME: ${DB_USER}
       DB_PASSWORD: ${DB_PASS}
     depends_on:
-      - db
-  db:
+      - plumber-db
+  plumber-db:
     image: mysql:5.7
     env_file:
       .env
@@ -28,7 +28,7 @@ services:
       - db-data:/var/lib/mysql
     ports:
       - 3307:3306
-  storage:
+  plumber-storage:
     image: minio/minio
     command: "server /data"
     env_file:

@@ -5,12 +5,12 @@ metadata:
   labels:
     app: plumber-db
 spec:
+  type: ClusterIP
   selector:
     app: plumber-db
   ports:
-  - port: 5000
-    targetPort: 5000
-  type: ClusterIP
+  - port: 3306
+    targetPort: 3306
 
 ---
 apiVersion: v1
@@ -20,12 +20,12 @@ metadata:
   labels:
     app: plumber-storage
 spec:
+  type: LoadBalancer
   selector:
     app: plumber-storage
   ports:
   - port: 9000
     targetPort: 9000
-  type: LoadBalancer
 
 ---
 apiVersion: v1

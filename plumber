@@ -1,0 +1,114 @@
+#!/bin/bash -e
+set -o pipefail
+
+SCRIPT_PATH=$(cd $(dirname $0); pwd)
+
+source ${SCRIPT_PATH}/server/.env
+
+help() {
+  echo "[USAGE] plumber COMMAND"
+  echo "  COMMANDS:"
+  echo "    gen-masterdata"
+  echo "    gen-code"
+  echo "    build-assetbundle"
+  echo "    upload-assetbundle"
+  echo "    gen-asset-db"
+  echo "    gen-asset-url"
+}
+
+docker build -t plumber-build ${SCRIPT_PATH}/tool
+export MSYS_NO_PATHCONV=1
+
+STORAGE_URL=http://${STORAGE_HOST}:9000
+
+COMMAND=$1
+OPTIONS=${@#$COMMAND}
+
+if [[ $COMMAND = "gen-masterdata" ]]; then
+  docker run -it -v ${SCRIPT_PATH}:/work plumber-build \
+         python /work/tool/gen_masterdata.py \
+         --input-dir /work/masterdata \
+         --output-dir /work/server/api/static
+
+  echo "success to generate masterdata"
+  exit 0
+fi
+
+if [[ $COMMAND = "gen-code" ]]; then
+  docker run -it -v ${SCRIPT_PATH}:/work plumber-build \
+         python /work/tool/gen_code.py \
+         --masterdata-path /work/server/api/static/masterdata.db
+
+  echo "success to generate code"
+  exit 0
+fi
+
+if [[ $COMMAND = "build-assetbundle" ]]; then
+  python ${SCRIPT_PATH}/batch_unity.py \
+         --project-path ${SCRIPT_PATH}/client \
+         --execute-method AssetBundleBuilder.BuildAssetBundle \
+         --log-path ${SCRIPT_PATH}/client/Logs/build-log-ab.txt
+
+  echo "success to build assetbundle"
+  exit 0
+fi
+
+if [[ $COMMAND = "upload-assetbundle" ]]; then
+  docker run -it -v ${SCRIPT_PATH}/:/work plumber-build \
+         python /work/tool/upload_asset.py \
+         --root-path /work/client/AssetBundles \
+         --bucket-name ${BUCKET_NAME} \
+         --aws-access-key ${AWS_ACCESS_KEY} \
+         --aws-secret-key ${AWS_SECRET_KEY} \
+         --s3-url ${STORAGE_URL}
+  echo "success to upload assetbundle"
+  exit 0
+fi
+
+if [[ $COMMAND = "gen-asset-db" ]]; then
+  docker run -it -v ${SCRIPT_PATH}:/work plumber-build \
+         python /work/tool/gen_asset_db.py \
+         --sqlite-path /work/server/api/static/masterdata.db \
+         --assetbundle-root-path /work/client/AssetBundles \
+         --masterdata-root-path /work/masterdata
+  echo "success to gen asset db"
+  exit 0
+fi
+
+if [[ $COMMAND = "gen-asset-url" ]]; then
+  docker run -it -v ${SCRIPT_PATH}:/work plumber-build \
+         python /work/tool/gen_asset_url.py \
+         --masterdata-path /work/server/api/static/masterdata.db \
+         --bucket-name ${BUCKET_NAME} \
+         --aws-access-key ${AWS_ACCESS_KEY} \
+         --aws-secret-key ${AWS_SECRET_KEY} \
+         --s3-url ${STORAGE_URL}
+  echo "success to gen asset url"
+  exit 0
+fi
+
+if [[ $COMMAND = "login-db" ]]; then
+  if [[ $OCHESTRATION = "k8s" ]]; then
+    POD_NAME=$(kubectl get pods -o NAME -l app=plumber-batch | head -n 1)
+    kubectl exec -it ${POD_NAME} -- mysql -hplumber-db -u${DB_USER} -p${DB_PASS} ${DB_DATABASE}
+  else
+    API_CONTAINER=$(docker ps -f "ancestor=server_api" -q)
+    docker exec -it ${API_CONTAINER} mysql -hplumber-db -u${DB_USER} -p${DB_PASS} ${DB_DATABASE}
+  fi
+  exit 0
+fi
+
+if [[ $COMMAND = "reset-db" ]]; then
+  if [[ $OCHESTRATION = "k8s" ]]; then
+    POD_NAME=$(kubectl get pods -o NAME -l app=plumber-batch | head -n 1)
+    kubectl exec -it ${POD_NAME} -- python /app/db.py RESET
+  else
+    API_CONTAINER=$(docker ps -f "ancestor=server_api" -q)
+    docker exec -it ${API_CONTAINER} python /app/db.py RESET
+  fi
+  exit 0
+fi
+
+echo "invalid command: [${COMMAND}]"
+help
+exit 1
