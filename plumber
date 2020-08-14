@@ -15,6 +15,7 @@ help() {
   echo "    gen-asset-db"
   echo "    gen-asset-url"
   echo "    build-container"
+  echo "    test-connection"
 }
 
 docker build -t plumber-build ${SCRIPT_PATH}/tool
@@ -114,6 +115,11 @@ fi
 if [[ $COMMAND = "build-container" ]]; then
   docker build -t gcr.io/practice01-286208/plumber_api server/api
   docker push gcr.io/practice01-286208/plumber_api
+  exit 0
+fi
+
+if [[ $COMMAND = "test-connection" ]]; then
+  curl --fail -X POST -H "Content-Type: application/json" -d '{ "user_id": "" }' http://${API_HOST}:5000/api_login
   exit 0
 fi
 
