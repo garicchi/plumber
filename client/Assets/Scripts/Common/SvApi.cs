@@ -27,6 +27,7 @@ public static class SvApi
     private static IEnumerator PostAsync(string endpoint, string data, Action<DownloadHandler> callback)
     {
         var url = $"{Config.Instance.API_URL}{endpoint}";
+        Debug.Log(url);
         var www = UnityWebRequest.Post(url, data);
         yield return www.SendWebRequest();
         if (www.isNetworkError || www.isHttpError)
