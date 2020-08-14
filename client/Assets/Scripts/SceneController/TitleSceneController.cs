@@ -13,19 +13,30 @@ public class TitleSceneController : MonoBehaviour
     [SerializeField]
     public Button BtnTitleStart;
     [SerializeField]
-    public InputField InputServer;
+    public InputField InputApiServer;
+    [SerializeField]
+    public InputField InputStorageServer;
     // Start is called before the first frame update
     void Start()
     {
         BtnTitleStart.onClick.AddListener(OnTitleStartClick);
         if (!PlayerPrefs.HasKey(Config.Instance.KEY_SERVER_URL))
         {
-            InputServer.text = "http://localhost";
+            InputApiServer.text = "http://localhost";
         }
         else
         {
             var s = Config.Instance.SERVER_URL.Split(':');
-            InputServer.text = string.Join(":", s.Take(2));
+            InputApiServer.text = string.Join(":", s.Take(2));
+        }
+        if (!PlayerPrefs.HasKey(Config.Instance.KEY_STORAGE_URL))
+        {
+            InputStorageServer.text = "http://localhost";
+        }
+        else
+        {
+            var s = Config.Instance.KEY_STORAGE_URL.Split(':');
+            InputStorageServer.text = string.Join(":", s.Take(2));
         }
     }
 
@@ -37,8 +48,8 @@ public class TitleSceneController : MonoBehaviour
 
     public void OnTitleStartClick() 
     {
-        Config.Instance.SERVER_URL = InputServer.text + ":5000";
-        Config.Instance.STORAGE_URL = InputServer.text + ":9000";
+        Config.Instance.SERVER_URL = InputApiServer.text + ":5000";
+        Config.Instance.STORAGE_URL = InputStorageServer.text + ":9000";
         api_login_req req = new api_login_req();
         req.user_id = PlayerPrefs.GetString(Config.Instance.KEY_USER_ID, "");
         StartCoroutine(SvApi.LoginAsync(req, (res) =>
