@@ -14,6 +14,7 @@ help() {
   echo "    upload-assetbundle"
   echo "    gen-asset-db"
   echo "    gen-asset-url"
+  echo "    build-container"
 }
 
 docker build -t plumber-build ${SCRIPT_PATH}/tool
@@ -107,6 +108,12 @@ if [[ $COMMAND = "reset-db" ]]; then
     API_CONTAINER=$(docker ps -f "ancestor=server_api" -q)
     docker exec -it ${API_CONTAINER} python /app/db.py RESET
   fi
+  exit 0
+fi
+
+if [[ $COMMAND = "build-container" ]]; then
+  docker build -t gcr.io/practice01-286208/plumber_api server/api
+  docker push gcr.io/practice01-286208/plumber_api
   exit 0
 fi
 

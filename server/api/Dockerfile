@@ -14,7 +14,6 @@ RUN mkdir -p /app
 
 ENV PYTHONPATH=/app
 COPY ./app /app
-COPY ./ope /ope
 COPY ./static /var/static
 
 WORKDIR /app
