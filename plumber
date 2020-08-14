@@ -44,7 +44,7 @@ if [[ $COMMAND = "gen-code" ]]; then
 fi
 
 if [[ $COMMAND = "build-assetbundle" ]]; then
-  export MSYS_NO_PATHCONV=0
+  unset MSYS_NO_PATHCONV
   python ${SCRIPT_PATH}/tool/batch_unity.py \
          --project-path ${SCRIPT_PATH}/client \
          --execute-method AssetBundleBuilder.BuildAssetBundle \
