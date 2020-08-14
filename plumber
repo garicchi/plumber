@@ -44,7 +44,7 @@ if [[ $COMMAND = "gen-code" ]]; then
 fi
 
 if [[ $COMMAND = "build-assetbundle" ]]; then
-  python ${SCRIPT_PATH}/batch_unity.py \
+  python ${SCRIPT_PATH}/tool/batch_unity.py \
          --project-path ${SCRIPT_PATH}/client \
          --execute-method AssetBundleBuilder.BuildAssetBundle \
          --log-path ${SCRIPT_PATH}/client/Logs/build-log-ab.txt
