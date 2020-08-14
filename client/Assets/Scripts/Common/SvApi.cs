@@ -11,7 +11,7 @@ public static class SvApi
     
     private static IEnumerator GetAsync(string endpoint, Action<DownloadHandler> callback)
     {
-        var url = $"{Config.Instance.SERVER_URL}{endpoint}";
+        var url = $"{Config.Instance.API_URL}{endpoint}";
         var www = UnityWebRequest.Get(url);
         yield return www.SendWebRequest();
         if (www.isNetworkError || www.isHttpError)
@@ -26,7 +26,7 @@ public static class SvApi
 
     private static IEnumerator PostAsync(string endpoint, string data, Action<DownloadHandler> callback)
     {
-        var url = $"{Config.Instance.SERVER_URL}{endpoint}";
+        var url = $"{Config.Instance.API_URL}{endpoint}";
         var www = UnityWebRequest.Post(url, data);
         yield return www.SendWebRequest();
         if (www.isNetworkError || www.isHttpError)

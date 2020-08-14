@@ -20,23 +20,21 @@ public class TitleSceneController : MonoBehaviour
     void Start()
     {
         BtnTitleStart.onClick.AddListener(OnTitleStartClick);
-        if (!PlayerPrefs.HasKey(Config.Instance.KEY_SERVER_URL))
+        if (!PlayerPrefs.HasKey(Config.Instance.KEY_API_HOST))
         {
-            InputApiServer.text = "http://localhost";
+            InputApiServer.text = "localhost";
         }
         else
         {
-            var s = Config.Instance.SERVER_URL.Split(':');
-            InputApiServer.text = string.Join(":", s.Take(2));
+            InputApiServer.text = Config.Instance.API_HOST;
         }
-        if (!PlayerPrefs.HasKey(Config.Instance.KEY_STORAGE_URL))
+        if (!PlayerPrefs.HasKey(Config.Instance.KEY_STORAGE_HOST))
         {
-            InputStorageServer.text = "http://localhost";
+            InputStorageServer.text = "localhost";
         }
         else
         {
-            var s = Config.Instance.KEY_STORAGE_URL.Split(':');
-            InputStorageServer.text = string.Join(":", s.Take(2));
+            InputStorageServer.text = Config.Instance.STORAGE_HOST;
         }
     }
 
@@ -48,8 +46,8 @@ public class TitleSceneController : MonoBehaviour
 
     public void OnTitleStartClick() 
     {
-        Config.Instance.SERVER_URL = InputApiServer.text + ":5000";
-        Config.Instance.STORAGE_URL = InputStorageServer.text + ":9000";
+        Config.Instance.API_HOST = InputApiServer.text;
+        Config.Instance.STORAGE_HOST = InputStorageServer.text;
         api_login_req req = new api_login_req();
         req.user_id = PlayerPrefs.GetString(Config.Instance.KEY_USER_ID, "");
         StartCoroutine(SvApi.LoginAsync(req, (res) =>
