@@ -43,11 +43,9 @@ namespace AssetData
             for (var index = 0; index < maxAssets; index++)
             {
                 var asset_data = assetList[index];
-                Debug.Log(asset_data.url);
                 yield return GetRequestAsync(asset_data.url, (handler)=> {
                     var savePath = Path.Combine(Config.Instance.ABSaveRootPath, asset_data.path);
                     var saveDir = Path.GetDirectoryName(savePath);
-                    Debug.Log(saveDir);
                     if (!Directory.Exists(saveDir))
                         Directory.CreateDirectory(saveDir);
                     File.WriteAllBytes(savePath, handler.data);
