@@ -40,6 +40,8 @@ namespace MasterData
     public class asset
     {
         
+        public string platform { get; set; }
+        
         public string path { get; set; }
         
         public string url { get; set; }

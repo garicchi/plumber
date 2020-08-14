@@ -51,6 +51,8 @@ class m_home_asset:
 
 class asset:
     
+    platform: str
+    
     path: str
     
     url: str
