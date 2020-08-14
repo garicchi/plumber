@@ -38,7 +38,7 @@ namespace AssetData
 
         public static IEnumerator DownloadAssetsAsync(Action<DownloadProgress> onUpdateCallback, Action onCompletedCallback)
         {
-            IList<asset> assetList = asset.Select($"WHERE platform = {Config.Instance.PLATFORM_STRING}").ToList();
+            IList<asset> assetList = asset.Select($"WHERE platform = \"{Config.Instance.PLATFORM_STRING}\"").ToList();
             int maxAssets = assetList.Count;
             for (var index = 0; index < maxAssets; index++)
             {
