@@ -38,11 +38,12 @@ namespace AssetData
 
         public static IEnumerator DownloadAssetsAsync(Action<DownloadProgress> onUpdateCallback, Action onCompletedCallback)
         {
-            IList<asset> assetList = asset.Select().ToList();
+            IList<asset> assetList = asset.Select($"WHERE platform = {Config.Instance.PLATFORM_STRING}").ToList();
             int maxAssets = assetList.Count;
             for (var index = 0; index < maxAssets; index++)
             {
                 var asset_data = assetList[index];
+                Debug.Log(asset_data.url);
                 yield return GetRequestAsync(asset_data.url, (handler)=> {
                     var savePath = Path.Combine(Config.Instance.ABSaveRootPath, asset_data.path);
                     var saveDir = Path.GetDirectoryName(savePath);

@@ -49,9 +49,6 @@ def main(args):
         _create_md_table(conn, tsv) 
     conn.commit()
     
-    conn.execute('CREATE TABLE asset (path text, url text)')
-    conn.commit()
-    
     print(f'generate masterdata in [{output_path}]')
     
     

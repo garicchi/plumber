@@ -8,10 +8,10 @@ import sqlite3
 PLATFORMS = ['Windows', 'Android']
 
 
-def _insert_asset_record(conn, path):
+def _insert_asset_record(conn, platform, path):
     dep_path = str(path) + '.dep'
-    conn.execute('INSERT OR IGNORE INTO asset VALUES (?, ?)', (path, ""))
-    conn.execute('INSERT OR IGNORE INTO asset VALUES (?, ?)', (dep_path, ""))
+    conn.execute('INSERT OR IGNORE INTO asset VALUES (?, ?, ?)', (platform , path, ""))
+    conn.execute('INSERT OR IGNORE INTO asset VALUES (?, ?, ?)', (platform, dep_path, ""))
     
 
 def _insert_asset_table(conn, tsv_path, assetbundle_root_path):
@@ -33,13 +33,13 @@ def _insert_asset_table(conn, tsv_path, assetbundle_root_path):
                 for p in PLATFORMS:
                     path = p + '/' + cel
                     dep_path = assetbundle_root_path / (str(path) + '.dep')
-                    _insert_asset_record(conn, path)
+                    _insert_asset_record(conn, p, path)
                     if not dep_path.exists():
                         continue
                     with open(dep_path) as f:
                         for line in f:
                             dep_child_path = p + '/' + line
-                            _insert_asset_record(conn, dep_child_path)
+                            _insert_asset_record(conn, p, dep_child_path)
                 conn.commit()
 
 
@@ -64,7 +64,8 @@ def main(args):
             f.writelines(_deps)
     
     conn = sqlite3.connect(sqlite_path)
-    conn.execute('DELETE FROM asset')
+    conn.execute('DROP TABLE IF EXISTS asset')
+    conn.execute('CREATE TABLE asset (platform text, path text, url text)')
     conn.commit()
     
     tsv_list = list(masterdata_root_path.glob("**/*.tsv"))
